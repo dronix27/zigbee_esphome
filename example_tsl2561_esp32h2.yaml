@@ -37,6 +37,19 @@ i2c:
   scl: 27
 
 sensor:
+  - platform: internal_temperature
+    name: "Internal Temperature"
+    id: "temp"
+    filters:
+      - delta: 0.1
+    on_value:
+      then:
+        - zigbee.setAttr:
+            id: zb
+            endpoint: 2
+            cluster: TEMP_MEASUREMENT
+            attribute: 0x0
+            value: !lambda "return x*100;"
   - platform: tsl2561
     name: "TSL2561 Ambient Light"
     address: 0x39
